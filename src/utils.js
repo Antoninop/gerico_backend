@@ -11,7 +11,7 @@ function isPasswordMatch(password, hashedPassword) {
 }
 
 function generateToken(userId) {
-  return jwt.sign({ id: userId }, 'votre_secret_jwt', { expiresIn: '1h' });
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
 
 module.exports = { hashPassword, isPasswordMatch, generateToken };

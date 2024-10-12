@@ -11,8 +11,8 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const userRoutes = require('./src/routes');
-app.use('/api', userRoutes);
+const userRoutes = require('./src/routes'); 
+app.use('/api', userRoutes); 
 
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);

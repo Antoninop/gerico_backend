@@ -27,7 +27,7 @@ function SavePayrolltoDB(userId, dateName, salary, payrollFilePath) {
     }
 }
 
-
+//TODO : fonction qui permet de générer une fiche de paye pour tous les utilisateurs pour le mois courant
 
 module.exports = {
     SavePayrolltoDB,

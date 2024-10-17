@@ -72,7 +72,6 @@ async function deleteUserByEmail(email) {
           console.error(`Erreur lors de la suppression des fiches de paie pour l'utilisateur avec l'id ${userId}:`, err);
           return reject(err);
         }
-        console.log(`Fiches de paie de l'utilisateur ${userId} supprimées avec succès.`);
         resolve();
       });
     });

@@ -26,10 +26,8 @@ async function benchmark() {
             console.log('Utilisateur créé avec succès:', userPayload);
         });
 
-        // Attendre la création de tous les utilisateurs
         await Promise.all(userCreationPromises);
 
-        // Créer ou recréer l'utilisateur DEV
         await BenchmarkcreateDEVUser(); 
     } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
@@ -39,10 +37,8 @@ async function benchmark() {
 async function BenchmarkcreateDEVUser() {
     const email = 'a@a';
     try {
-        // Supprimer l'utilisateur DEV s'il existe déjà
         await deleteUserByEmail(email);
 
-        // Créer un nouvel utilisateur DEV
         const userPayload = {
             firstName: 'John',
             lastName: 'Doe',
@@ -73,7 +69,6 @@ async function BenchmarkcreateUser(data) {
         `;
         const userValues = [userId, firstName, lastName, email, hashedPassword, dateOfBirth, position, hireDate, salary];
 
-        // Retourner une promesse pour la création de l'utilisateur
         await new Promise((resolve, reject) => {
             db.query(query, userValues, (err, results) => {
                 if (err) {
@@ -84,7 +79,6 @@ async function BenchmarkcreateUser(data) {
             });
         });
 
-        // Après la création de l'utilisateur, générer les fiches de paie
         await BenchmarkgeneratePayrollFiles({
             id: userId,
             firstName,
@@ -113,7 +107,6 @@ async function BenchmarkgeneratePayrollFiles(user) {
         let currentYear = hireDate.getFullYear();
         let currentMonth = hireDate.getMonth(); 
 
-        // Boucle pour générer les fiches de paie depuis l'embauche jusqu'à aujourd'hui
         while (currentYear < currentDate.getFullYear() || (currentYear === currentDate.getFullYear() && currentMonth <= currentDate.getMonth())) {
             const monthString = monthNames[currentMonth]; 
             const dateName = `${currentYear}-${monthString}`;
@@ -132,10 +125,8 @@ async function BenchmarkgeneratePayrollFiles(user) {
 
             await fs.writeFile(payrollFilePath, payrollContent, 'utf8');
 
-            // Sauvegarder la fiche de paie en base de données
             await SavePayrolltoDB(userId, dateName, user.salary, payrollFilePath);
 
-            // Passer au mois suivant
             currentMonth++;
             if (currentMonth === 12) {
                 currentMonth = 0;

@@ -9,7 +9,11 @@ exports.authenticateJWT = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: 'Token invalide' });
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Token expiré. Veuillez vous reconnecter.' });
+      } else {
+        return res.status(403).json({ message: 'Token invalide.' });
+      }
     }
 
     req.user = user; 

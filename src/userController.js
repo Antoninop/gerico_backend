@@ -1,10 +1,8 @@
 const db = require('./db');
-const { hashPassword, isPasswordMatch, generateToken, initPayrollFiles } = require('./utils');
+const { hashPassword, isPasswordMatch, generateToken, generateUUID } = require('./utils');
 const crypto = require('crypto'); 
 
-function generateUUID() {
-  return crypto.randomUUID(); 
-}
+
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -32,9 +30,8 @@ exports.loginUser = async (req, res) => {
           return res.status(401).json({ message: 'Identifiants invalides' });
       }
 
-      const token = generateToken(user.id); // Assurez-vous que le token est généré
+      const token = generateToken(user.id); 
 
-      // Vérifiez que le token est bien renvoyé
       res.status(200).json({ message: 'Connexion réussie', token, userId: user.id }); 
   });
 };
@@ -77,7 +74,6 @@ exports.createUser = async (req, res) => {
         return res.status(500).json({ message: 'Erreur interne du serveur' });
       }
 
-      initPayrollFiles(userId);
       res.status(201).json({ message: 'Utilisateur créé avec succès.', userId });
     });
 
@@ -89,7 +85,7 @@ exports.createUser = async (req, res) => {
 
 
 exports.fetchPayroll = async (req, res) => {
-  const id_user = req.user.id;  // Récupère l'ID utilisateur à partir du token JWT
+  const id_user = req.user.id;  
 
   try {
     const query = 'SELECT * FROM Payroll WHERE id_user = ?';

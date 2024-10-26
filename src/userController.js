@@ -32,8 +32,8 @@ exports.loginUser = async (req, res) => {
 
       const token = generateToken(user.id); 
 
-      res.status(200).json({ message: 'Connexion réussie', token, userId: user.id }); 
-  });
+      res.status(200).json({ message: 'Connexion réussie', token, userId: user.id, firstname: user.first_name });
+    });
 };
 
 

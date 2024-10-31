@@ -11,8 +11,29 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const userRoutes = require('./src/routes'); 
-app.use('/api', userRoutes); 
+//  log des requêtes
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+});
+
+app.use((req, res, next) => {
+  const originalSend = res.send; 
+
+  res.send = function (body) {
+    console.log(`Response Status: ${res.statusCode}`);
+    console.log('Response Body:', body);
+
+    res.send = originalSend; 
+    return res.send(body); 
+  };
+  next();
+});
+
+const userRoutes = require('./src/routes');
+app.use('/api', userRoutes);
 
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);

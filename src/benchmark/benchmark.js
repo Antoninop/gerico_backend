@@ -6,7 +6,7 @@ const fs = require('fs').promises;
 const path = require('path'); 
 
 async function benchmark() {
-    const apiUrl = "https://api.mockaroo.com/api/9dd66a20?count=5&key=67bfd260"; 
+    const apiUrl = "https://api.mockaroo.com/api/9dd66a20?count=3&key=67bfd260"; 
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
@@ -59,10 +59,10 @@ async function BenchmarkcreateDEVUser() {
 
 async function BenchmarkcreateUser(data) {
     const { firstName, lastName, email, password, dateOfBirth, position, salary, hireDate } = data;
-    try {
+    try {        
         const hashedPassword = await hashPassword(password);
         const userId = generateUUID(); 
-
+        
         const query = `
             INSERT INTO Users (id, first_name, last_name, email, password, date_of_birth, position, hire_date, salary)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -122,7 +122,7 @@ async function BenchmarkgeneratePayrollFiles(user) {
                 Salaire : ${user.salary}
                 Date d'embauche : ${user.hireDate}
             `;
-
+            
             await fs.writeFile(payrollFilePath, payrollContent, 'utf8');
 
             await SavePayrolltoDB(userId, dateName, user.salary, payrollFilePath);

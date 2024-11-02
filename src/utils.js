@@ -13,7 +13,15 @@ function isPasswordMatch(password, hashedPassword) {
 }
 
 function generateToken(userId) {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    console.log('Veuillez créer un fichier .env dans le répertoire backend avec la ligne suivante :');
+    console.log('JWT_SECRET=cle_secrete');
+    return null; 
+  }
+
+  return jwt.sign({ id: userId }, secret, { expiresIn: '1h' });
 }
 
 function generateSmallID() {
@@ -39,7 +47,6 @@ async function ensureDirectoryExists(dirPath) {
 function generateUUID() {
   return crypto.randomUUID(); 
 }
-
 
 async function findUserByEmail(email) {
   const query = 'SELECT * FROM Users WHERE email = ?';
@@ -92,8 +99,6 @@ async function deleteUserByEmail(email) {
     throw error;
   }
 }
-
-
 
 module.exports = { 
   hashPassword, 

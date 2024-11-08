@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: API Gerico
+  description: API express SAE 2.2
+  version: 1.0.0
+  contact:
+    name: Piraino Antonino
+    email: antoninopiraino70@gmail.com
+servers:
+  - url: http://localhost:3000
+    description: Serveur local 
+paths:
+  /login:
+    post:
+      summary: "Authentification de l'utilisateur"
+      description: "Permet à un utilisateur de se connecter en fournissant un nom d'utilisateur et un mot de passe."
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "john_doe"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        200:
+          description: "Authentification réussie"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    example: "jwt_token_here"
+        400:
+          description: "Mauvais nom d'utilisateur ou mot de passe"
+        500:
+          description: "Erreur serveur interne"
+
+  /register:
+    post:
+      summary: "Enregistrement d'un nouvel utilisateur"
+      description: "Crée un nouvel utilisateur avec les informations fournies."
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "john_doe"
+                password:
+                  type: string
+                  example: "password123"
+                email:
+                  type: string
+                  format: email
+                  example: "john_doe@example.com"
+      responses:
+        201:
+          description: "Utilisateur créé avec succès"
+        400:
+          description: "Mauvaise demande (par exemple, utilisateur déjà existant)"
+        500:
+          description: "Erreur serveur interne"
+
+  /fetchPayroll:
+    get:
+      summary: "Récupérer les informations de paie"
+      description: "Permet de récupérer les informations de paie de l'utilisateur connecté."
+      operationId: fetchPayroll
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: "Informations de paie récupérées avec succès"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payroll:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        amount:
+                          type: number
+                          format: float
+                          example: 1500.50
+                        date:
+                          type: string
+                          format: date
+                          example: "2024-10-30"
+        401:
+          description: "Non autorisé (token JWT manquant ou invalide)"
+        500:
+          description: "Erreur serveur interne"
+
+  /benchmark:
+    post:
+      summary: "Exécution d'un benchmark"
+      description: "Permet d'exécuter un benchmark sur l'API et de récupérer les résultats."
+      operationId: benchmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                benchmarkType:
+                  type: string
+                  example: "API stress test"
+                duration:
+                  type: integer
+                  example: 60
+      responses:
+        200:
+          description: "Benchmark exécuté avec succès"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: "Benchmark completed successfully"
+        400:
+          description: "Mauvaise demande (par exemple, paramètres manquants)"
+        500:
+          description: "Erreur serveur interne"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

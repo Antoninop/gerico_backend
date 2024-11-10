@@ -24,6 +24,7 @@ exports.loginUser = async (req, res) => {
       }
 
       const user = results[0];
+      console.log("ZzZzZz" , user)
       const isMatch = isPasswordMatch(password, user.password);
 
       if (!isMatch) {

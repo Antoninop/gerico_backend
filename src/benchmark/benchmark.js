@@ -58,16 +58,17 @@ async function BenchmarkcreateDEVUser() {
 }
 
 async function BenchmarkcreateUser(data) {
-    const { firstName, lastName, email, password, dateOfBirth, position, salary, hireDate } = data;
-    try {        
+    const { firstName, lastName, email, password, dateOfBirth, position, salary, hireDate, remaining_holidays = null } = data;
+    try {
         const hashedPassword = await hashPassword(password);
-        const userId = generateUUID(); 
-        
+        const userId = generateUUID();
+
         const query = `
-            INSERT INTO Users (id, first_name, last_name, email, password, date_of_birth, position, hire_date, salary)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO Users (id, first_name, last_name, email, password, date_of_birth, position, hire_date, salary, remaining_holidays)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const userValues = [userId, firstName, lastName, email, hashedPassword, dateOfBirth, position, hireDate, salary];
+        
+        const userValues = [userId, firstName, lastName, email, hashedPassword, dateOfBirth, position, hireDate, salary, remaining_holidays || 30];
 
         await new Promise((resolve, reject) => {
             db.query(query, userValues, (err, results) => {
@@ -141,3 +142,5 @@ async function BenchmarkgeneratePayrollFiles(user) {
 module.exports = {
     benchmark,
 };
+
+

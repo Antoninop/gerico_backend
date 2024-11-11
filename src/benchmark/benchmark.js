@@ -142,5 +142,3 @@ async function BenchmarkgeneratePayrollFiles(user) {
 module.exports = {
     benchmark,
 };
-
-

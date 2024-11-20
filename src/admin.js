@@ -11,7 +11,7 @@ exports.fetchArchivedUsers = async (req, res) => {
   }
 
   try {
-    const sql = 'SELECT first_name, last_name, email, hire_date, position, salary, is_admin FROM Users WHERE archived = 1';    
+    const sql = 'SELECT first_name, last_name, email, hire_date, position, remaining_holidays, is_admin FROM Users WHERE archived = 1';    
     const results = await query(sql);
     if (!results || results.length === 0) {
       return res.status(200).json({ message: 'No archived users found.' });
@@ -34,7 +34,7 @@ exports.fetchUsers = async (req, res) => {
   }
 
   try {
-    const sql = 'SELECT first_name, last_name, email, hire_date, position, salary, is_admin FROM Users WHERE archived = 0';    
+    const sql = 'SELECT first_name, last_name, email, hire_date, position,is_admin,remaining_holidays FROM Users WHERE archived = 0';    
     const results = await query(sql);
     if (!results || results.length === 0) {
       return res.status(200).json({ message: 'No  users found.' });

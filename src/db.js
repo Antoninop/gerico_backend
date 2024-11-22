@@ -32,7 +32,7 @@ function connectWithRetry() {
   });
 }
 
-setTimeout(connectWithRetry, 5000); //  délai initial
+setTimeout(connectWithRetry, 5000); 
 
 module.exports = {
   query: (sql, values, callback) => {

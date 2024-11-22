@@ -69,4 +69,57 @@ exports.fetchUsers = async (req, res) => {
       return res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+  exports.fetchAskedHoliday = async (req, res) => {
+    try {
+      const sql = `
+        SELECT 
+          u.id AS user_id,
+          u.first_name,
+          u.last_name,
+          u.remaining_holidays,
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'state', h.state,
+              'denied', h.denied,
+              'date', h.date,
+              'length', h.length
+            )
+          ) AS holidays
+        FROM Users u
+        LEFT JOIN holiday h ON u.id = h.id_user
+        GROUP BY u.id
+      `;
+  
+      const results = await query(sql);
+  
+      if (!results || results.length === 0) {
+        return res.status(404).json({ message: 'No holiday information found' });
+      }
+  
+      const users = results.map(user => {
+        const holidays = JSON.parse(user.holidays || '[]').reduce(
+          (acc, { state, denied, ...rest }) => {
+            if (state === 0) acc.pending.push(rest);
+            else if (state === 1) denied === 0 ? acc.approved.push(rest) : acc.denied.push(rest);
+            return acc;
+          },
+          { pending: [], approved: [], denied: [] }
+        );
+  
+        return {
+          user_id: user.user_id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          remaining_holidays: user.remaining_holidays,
+          holidays,
+        };
+      });
+  
+      res.status(200).json({ users });
+    } catch (err) {
+      console.error('Error fetching holiday information:', err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
   

@@ -36,6 +36,11 @@ function generateSmallID() {
   return result;
 }
 
+function generateSmallINT() {
+  let num = Math.floor(Math.random() * 100000);  
+  return num.toString().padStart(5, '0');
+}
+
 async function ensureDirectoryExists(dirPath) {
   try {
     await fs.mkdir(dirPath, { recursive: true });
@@ -109,4 +114,5 @@ module.exports = {
   generateUUID,
   deleteUserByEmail,
   findUserByEmail,
+  generateSmallINT,
 };

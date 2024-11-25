@@ -5,7 +5,7 @@ const { fetchAccountInfo } = require('./account');
 const { fetchArchivedUsers , fetchUsers ,fetchAskedHoliday } = require ('./admin');
 const { authenticateJWT } = require('./authMiddleware');
 const { benchmark } = require('./benchmark/benchmark');
-const { sendHelloWorld } = require('./mail')
+const { sendCodeResetPass , verifyCodeResetPass } = require('./mail')
 
 
 const router = express.Router();
@@ -21,6 +21,6 @@ router.get('/fetchUsers', authenticateJWT, fetchUsers);
 router.post('/askHoliday' , authenticateJWT, askHoliday);
 router.post('/benchmark', benchmark);
 
-router.post('/send-hello', sendHelloWorld);
-
+router.post('/sendCodeResetPass', sendCodeResetPass);
+router.post('/verifyCodeResetPass', verifyCodeResetPass)
 module.exports = router;

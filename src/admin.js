@@ -25,6 +25,53 @@ exports.fetchArchivedUsers = async (req, res) => {
 
 
 
+exports.ArchivedUser = async (req, res) => {
+  const id_user = req.user?.id;
+  const email = req.body.email;
+
+  if (!id_user) {
+    return res.status(400).json({ message: 'User ID missing from request.' });
+  }
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required.' });
+  }
+
+  try {
+    const sql = 'UPDATE Users SET archived = 1 WHERE email = ?';    
+    await query(sql, [email]); 
+    res.status(200).json({ message: 'User archived successfully.' });
+  } catch (err) {
+    console.error(`Error archiving user with ID ${id_user} and email ${email}:`, err);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+exports.UnArchivedUser = async (req, res) => {
+  const id_user = req.user?.id;
+  const email = req.body.email;
+
+  if (!id_user) {
+    return res.status(400).json({ message: 'User ID missing from request.' });
+  }
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required.' });
+  }
+
+  try {
+    const sql = 'UPDATE Users SET archived = 0 WHERE email = ?';    
+    await query(sql, [email]); 
+    res.status(200).json({ message: 'User Unarchived successfully.' });
+  } catch (err) {
+    console.error(`Error archiving user with ID ${id_user} and email ${email}:`, err);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
 
 exports.fetchUsers = async (req, res) => {
   const id_user = req.user?.id;

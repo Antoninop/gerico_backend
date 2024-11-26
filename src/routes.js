@@ -2,7 +2,7 @@ const express = require('express');
 const { loginUser, createUser, fetchPayroll } = require('./userController');
 const { fetchHolidayInfo,askHoliday } = require('./holiday');
 const { fetchAccountInfo } = require('./account');
-const { fetchArchivedUsers , fetchUsers ,fetchAskedHoliday } = require ('./admin');
+const { fetchArchivedUsers , fetchUsers ,fetchAskedHoliday,ArchivedUser,UnArchivedUser } = require ('./admin');
 const { authenticateJWT } = require('./authMiddleware');
 const { benchmark } = require('./benchmark/benchmark');
 const { sendCodeResetPass , verifyCodeResetPass } = require('./mail')
@@ -17,6 +17,10 @@ router.get('/fetchAskedHoliday', authenticateJWT, fetchAskedHoliday);
 router.get('/fetchHoliday', authenticateJWT, fetchHolidayInfo); 
 router.get('/fetchAccountInfo', authenticateJWT, fetchAccountInfo); 
 router.get('/fetchArchivedUsers', authenticateJWT, fetchArchivedUsers); 
+router.post('/ArchiveUser', authenticateJWT, ArchivedUser);
+router.post('/UnArchiveUser', authenticateJWT, UnArchivedUser);
+
+
 router.get('/fetchUsers', authenticateJWT, fetchUsers); 
 router.post('/askHoliday' , authenticateJWT, askHoliday);
 router.post('/benchmark', benchmark);

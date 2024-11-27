@@ -17,7 +17,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
 });
-// 1. Envoi du code
 
 exports.sendCodeResetPass = async (req, res) => {
   const { email } = req.body;
@@ -59,7 +58,6 @@ exports.sendCodeResetPass = async (req, res) => {
   }
 };
 
-// 2. Vérification du code
 exports.verifyCodeResetPass = async (req, res) => {
   const { email, code } = req.body;
 
@@ -91,7 +89,6 @@ exports.verifyCodeResetPass = async (req, res) => {
   }
 };
 
-// 3. Réinitialisation du mot de passe
 exports.Newpassword = async (req, res) => {
   const { email, id, password } = req.body;
 

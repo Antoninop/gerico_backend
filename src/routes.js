@@ -5,7 +5,7 @@ const { fetchAccountInfo } = require('./account');
 const { fetchArchivedUsers , fetchUsers ,fetchAskedHoliday,ArchivedUser,UnArchivedUser } = require ('./admin');
 const { authenticateJWT } = require('./authMiddleware');
 const { benchmark } = require('./benchmark/benchmark');
-const { sendCodeResetPass , verifyCodeResetPass } = require('./mail')
+const { sendCodeResetPass , verifyCodeResetPass , Newpassword } = require('./mail')
 
 
 const router = express.Router();
@@ -27,4 +27,6 @@ router.post('/benchmark', benchmark);
 
 router.post('/sendCodeResetPass', sendCodeResetPass);
 router.post('/verifyCodeResetPass', verifyCodeResetPass)
+router.post('/Newpassword', Newpassword);
+
 module.exports = router;

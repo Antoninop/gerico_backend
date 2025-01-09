@@ -30,15 +30,15 @@ exports.loginUser = async (req, res) => {
           return res.status(401).json({ message: 'Identifiants invalides' });
       }
 
-      const token = generateToken(user.id); 
+      const token = generateToken(user.id , user.is_admin ,user.first_name); 
 
-      res.status(200).json({ message: 'Connexion réussie', token, userId: user.id, firstname: user.first_name });
+      res.status(200).json({ message: 'Connexion réussie', token});
     });
 };
 
 
 exports.createUser = async (req, res) => {
-  const { firstName, lastName, email, password, dateOfBirth, position, isAdmin } = req.body;
+  const { firstName, lastName, email, password, dateOfBirth, position, isAdmin , salary } = req.body;
 
   if (!firstName || !lastName || !email || !password || !dateOfBirth) {
     return res.status(400).json({ message: 'Tous les champs obligatoires doivent être remplis.' });
@@ -62,11 +62,11 @@ exports.createUser = async (req, res) => {
     const userId = generateUUID();
 
     const query = `
-      INSERT INTO Users (id, first_name, last_name, email, password, date_of_birth, position, is_admin)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO Users (id, first_name, last_name, email, password, date_of_birth, position, is_admin , salary)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const userValues = [userId, firstName, lastName, email, hashedPassword, dateOfBirth, position, isAdmin || false];
+    const userValues = [userId, firstName, lastName, email, hashedPassword, dateOfBirth, position, isAdmin || false , salary];
 
     db.query(query, userValues, (err, results) => {
       if (err) {
@@ -74,7 +74,7 @@ exports.createUser = async (req, res) => {
         return res.status(500).json({ message: 'Erreur interne du serveur' });
       }
 
-      res.status(201).json({ message: 'Utilisateur créé avec succès.', userId });
+      res.status(200).json({ message: 'Utilisateur créé avec succès.', userId });
     });
 
   } catch (err) {

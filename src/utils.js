@@ -12,7 +12,7 @@ function isPasswordMatch(password, hashedPassword) {
   return hashedInput === hashedPassword;
 }
 
-function generateToken(userId) {
+function generateToken(userId , is_admin , first_name) {
   const secret = process.env.JWT_SECRET;
 
   if (!secret) {
@@ -21,7 +21,7 @@ function generateToken(userId) {
     return null; 
   }
 
-  return jwt.sign({ id: userId }, secret, { expiresIn: '1h' });
+  return jwt.sign({ id: userId , admin : is_admin , firstname : first_name  }, secret, { expiresIn: '1h' });
 }
 
 function generateSmallID() {

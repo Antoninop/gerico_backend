@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 const { promisify } = require('util'); 
-const bcrypt = require('bcrypt');
 const db = require('./db');
 const query = promisify(db.query).bind(db);
 const { generateSmallINT, generateUUID , hashPassword} = require('./utils');
